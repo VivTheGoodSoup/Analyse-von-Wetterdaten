@@ -30,3 +30,4 @@ print(df.isnull().sum())
 df["TMAX"] = df.groupby("CITY")["TMAX"].transform(lambda x: x.fillna(x.mean()))
 
 # Heathmap ergänzen
+#Test Saskia
