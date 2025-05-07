@@ -28,3 +28,5 @@ print(df.isnull().sum())
 '''
 #Fehlenden TMAX Wert mit dem Mittelwert der gleichen Stadt ersetzen
 df["TMAX"] = df.groupby("CITY")["TMAX"].transform(lambda x: x.fillna(x.mean()))
+
+# Heathmap ergänzen
