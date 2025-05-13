@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
 class WeatherPlotter:
 
@@ -81,3 +82,35 @@ class WeatherPlotter:
     # Plottet den Gesamtschneefall für jeden Standort
     def plot_total_snow(self, location_data: dict[str, pd.DataFrame]):
         self._plot_total_value(location_data, "snow", "Total Snow", "Total (mm)", color='ivory')
+
+
+    # Plottet die Heatmap für die Durchschnittstemperaturen
+    def plot_combined_heatmap(self, df: dict[str, pd.DataFrame]) -> None:
+        locations   = ", ".join(df.keys())
+        combined_df = pd.concat([data.assign(location=loc) for loc, data in df.items()], ignore_index=True)
+        combined_df["location_date"] = combined_df['location'] + " " + combined_df['year'].astype(str)
+        pivot_table = combined_df.pivot_table(values="temp_avg", index="location_date", columns="month")
+
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(pivot_table, annot=True, fmt=".1f", cmap="coolwarm")
+        plt.title(f"Monatliche Durchschnittstemperaturen {locations}")
+        plt.xlabel("Monat")
+        plt.ylabel("Stadt & Jahr")
+        plt.tight_layout()
+        plt.show()
+
+    # Plottet die monatlichen Durchschnittstemperaturen für jeden Standort
+    def plot_city_heatmap(self, location_name: str, location_dataframe: pd.DataFrame) -> None:
+        location_dataframe["date"]  = pd.to_datetime(location_dataframe["date"])
+        location_dataframe["year"]  = location_dataframe["date"].dt.year
+        location_dataframe["month"] = location_dataframe["date"].dt.month
+
+        pivot_table = location_dataframe.pivot_table(values="temp_avg", index="year", columns="month")
+
+        plt.figure(figsize=(10, 6))
+        sns.heatmap(pivot_table, annot=True, fmt=".1f", cmap="coolwarm")
+        plt.title(f'Monatliche Durchschnittstemperaturen in {location_name} (°C)')
+        plt.xlabel('Monat')
+        plt.ylabel('Jahr')
+        plt.tight_layout()
+        plt.show()
