@@ -1,4 +1,4 @@
-from .analyzer import WeatherAnalyzer
+from .helper import WeatherHelper
 from .fetcher import WeatherDataFetcher
 from .plotter import WeatherPlotter
 from .singleton import Singleton
